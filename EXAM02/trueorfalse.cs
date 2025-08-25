@@ -6,18 +6,21 @@ using System.Threading.Tasks;
 
 namespace EXAM02
 {
-    public class Trueorfalse : Question
+    public class Trueorfalse : Questions
     {
         public Trueorfalse(string header, string body, int marks)
             : base(header, body, marks)
         {
-           answerlist.Add(new Answer(1, "True"));
-            answerlist.Add(new Answer(2, "False"));
+           Answerlist.Add(new Answer(1, "True"));
+            Answerlist.Add(new Answer(2, "False"));
         }
+
+        public object Answers { get; internal set; }
+
         public override void Display()
         {
             Console.WriteLine(this);
-            foreach (var ans in answerlist)
+            foreach (var ans in Answerlist)
             {
                 Console.WriteLine(ans);
             }

@@ -10,6 +10,9 @@ namespace EXAM02
     {
         public Finalexam( int time , int numofquestion) 
                : base(time , numofquestion) { }
+
+        public string AnswerId { get; private set; }
+
         public override void Showexam()
         {
             int grade = 0;
@@ -20,7 +23,8 @@ namespace EXAM02
                
                 int ansid=int.Parse(Console.ReadLine());
 
-                if (q.rightanswer != null  &&  q.rightanswer == answerid) ;
+                if (q.rightanswer != null && q.rightanswer == AnswerId)
+                    
                 {
                     grade += q.marks;
                 }

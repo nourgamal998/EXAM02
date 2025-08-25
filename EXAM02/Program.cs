@@ -1,53 +1,94 @@
-﻿namespace EXAM02
+﻿
+using EXAM02;
+
+var subject = new Subject(1, "Programming Fundamentals");
+
+
+Console.Write("Choose exam type (final/practical): ");
+string type = (Console.ReadLine() ?? "").Trim().ToLower();
+
+
+Console.Write("Enter exam duration (minutes): ");
+int duration = int.Parse(Console.ReadLine() ?? "60");
+
+
+Console.Write("Enter number of questions: ");
+int numQuestions = int.Parse(Console.ReadLine() ?? "1");
+
+Exam exam;
+if (type.StartsWith("p"))
+    exam = new Practecal(duration, numQuestions);
+else
+    exam = new Finalexam(duration, numQuestions);
+
+
+for (int i = 0; i < numQuestions; i++)
 {
-    internal class Program
+    Console.WriteLine($"\n--- Question {i + 1} ---");
+    Console.Write("Enter question header: ");
+    string header = Console.ReadLine() ?? "";
+    Console.Write("Enter question body: ");
+    string body = Console.ReadLine() ?? "";
+    Console.Write("Enter question mark: ");
+    int mark = int.Parse(Console.ReadLine() ?? "1");
+
+    Questions question;
+
+    if (type.StartsWith("f"))
     {
-        static void Main(string[] args)
+        Console.Write("Enter question type (mcq/truefalse): ");
+        string qType = (Console.ReadLine() ?? "").Trim().ToLower();
+
+        if (qType.StartsWith("true"))
         {
-          var subject = new Subject(1, "programming");
-
-            Console.WriteLine("choosse exam type : 1-final , 2-practical ");
-            int type = int.Parse(Console.ReadLine());
-
-            Exam exam;
-            if (type == 1)
-            {
-                exam = new Finalexam(60,2);
-
-                var q1 = new Trueorfalse("Is 2+2=4?", "Math question", 5);
-                q1.rightanswer = q1.answerist[1];
-
-                q1.rightanswer = new answerlist { 1, "True" };
-                var q2 = new Mcq("Q2", "Which is not a .NET language?", 5);
-                q2.answerlist.Add(new Answer(1, "C#"));
-                q2.answerlist.Add(new Answer(2, "c++"));
-                q2.answerlist.Add(new Answer(3, "Python"));
-                q2.answerlist.Add(new Answer(4, "F#"));
-                q2.answerlist = q2.answerlist[2];
-
-                exam.Question.Add(q1);
-                exam.Question.Add(q2);
-            }
-            else
-            {
-                exam = new Practecal(30, 1);
-
-                var q1 = new Mcq("Q1", "Which of the following is a value type?", 5);
-                q1.answerlist.Add(new Answer(1, "string"));
-                q1.answerlist.Add(new Answer(2, "int"));
-                q1.answerlist.Add(new Answer(3, "object"));
-                q1.answerlist.Add(new Answer(4, "dynamic"));
-                q1.rightanswer = q1.answerlist[1];
-
-                exam.Question.Add(q1);
-            }
-
-            subject.createxam(exam);
-
-            Console.WriteLine($"\n{subject}\n--- Starting Exam ---\n");
-            subject.Exam.Showexam();
+            var tfq = new Trueorfalse(header, body, mark);
+            Console.Write("Enter correct answer (True/False): ");
+            string answer = (Console.ReadLine() ?? "").Trim();
+            // tfq.rightanswer = tfq.Answers.Find(a => a.text.Equals(answer, StringComparison.OrdinalIgnoreCase));
+            question = tfq;
         }
-
+        else
+        {
+            var mcq = new Mcq(header, body, mark);
+            Console.Write("Enter number of choices: ");
+            int numChoices = int.Parse(Console.ReadLine() ?? "2");
+            for (int j = 0; j < numChoices; j++)
+            {
+                Console.Write($"Enter choice {j + 1}: ");
+                string choice = Console.ReadLine() ?? "";
+                mcq.Answerlist.Add(new Answer(j + 1, choice));
+            }
+            Console.Write("Enter correct answer text: ");
+            string correct = Console.ReadLine() ?? "";
+            mcq.rightanswer = mcq.Answer.Find(a => a.AnswerText.Equals(correct, StringComparison.OrdinalIgnoreCase));
+            question = mcq;
+        }
     }
+    else
+    {
+        var mcq = new Mcq(header, body, mark);
+        Console.Write("Enter number of choices: ");
+        int numChoices = int.Parse(Console.ReadLine() ?? "2");
+        for (int j = 0; j < numChoices; j++)
+        {
+            Console.Write($"Enter choice {j + 1}: ");
+            string choice = Console.ReadLine() ?? "";
+            mcq.Answerlist.Add(new Answer(j + 1, choice));
+        }
+        Console.Write("Enter correct answer text: ");
+        string correct = Console.ReadLine() ?? "";
+        //mcq.rightanswer = mcq.Answers.Find(a => a.AnswerText.Equals(correct, StringComparison.OrdinalIgnoreCase));
+        question = mcq;
     }
 
+    exam.Question.Add(question);
+}
+
+exam.numofquestion = exam.Question.Count;
+subject.createxam(exam);
+Console.WriteLine("\n--- Exam Created ---");
+Console.WriteLine(subject);
+subject.Exam.Showexam();
+
+Console.WriteLine("\nPress any key to exit...");
+Console.ReadKey();

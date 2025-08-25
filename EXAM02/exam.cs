@@ -10,13 +10,13 @@ namespace EXAM02
     {
         public int time { get; set; }
         public int numofquestion { get; set; }
-        public List<Question> Question { get; set; }
+        public List<Questions> Question { get; set; }
 
         protected Exam(int time, int numofquestion)
         {
             time = time;
             numofquestion = numofquestion;
-            Question = new List<Question>();
+            Question = new List<Questions>();
         }
         public abstract void Showexam();
     }
